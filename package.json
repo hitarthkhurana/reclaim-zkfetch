@@ -1,0 +1,82 @@
+{
+  "name": "reclaim-zkfetch-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reclaimprotocol/js-sdk": "2.2.1",
+    "@reclaimprotocol/zk-fetch": "0.3.1",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "assert": "^2.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "child_process": "^1.0.2",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.1",
+    "http_request": "latest",
+    "jsdom": "latest",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "1.0.1",
+    "react": "^18.3.1",
+    "react-app-rewired": "latest",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-json-tree": "^0.19.0",
+    "react-router-dom": "^6.24.1",
+    "react-scripts": "5.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
+    "vm-browserify": "1.1.2",
+    "web-vitals": "^2.1.4",
+    "web3": "^4.10.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "constants-browserify": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "node-polyfill-webpack-plugin": "^4.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "tailwindcss": "^3.4.4",
+    "url": "^0.11.0"
+  },
+  "overrides": {
+    "koffi": false
+  },
+  "scripts": {
+    "prepare": "node node_modules/@reclaimprotocol/zk-symmetric-crypto/lib/scripts/download-files",
+    "build": "npm run prepare && react-app-rewired build",
+    "start": "react-app-rewired start",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "postinstall": "sh script.sh"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "browser": {
+    "fs": false,
+    "child_process": false,
+    "koffi": false
+  }
+}

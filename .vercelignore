@@ -1,0 +1,16 @@
+.git
+.env
+.env.local
+node_modules
+.gitignore
+README.md
+contracts/
+hardhat.config.js
+test/
+scripts/
+cache/
+artifacts/
+coverage/
+coverage.json
+*.test.js
+*.spec.js 
