@@ -7,7 +7,9 @@ import "./App.css";
 // Import the specific methods we need
 import { verifyProof, transformForOnchain } from '@reclaimprotocol/js-sdk';
 
-const VERIFIER_CONTRACT_ADDRESS = "0x60A8DEBC449699f25FB3a01822B50d5C6395b00e";
+const VERIFIER_CONTRACT_ADDRESS = "0x6E4e27f08FB956CfE66AeA75c256E62d82B87747";
+const SEPOLIA_CHAIN_ID = "0xaa36a7"; // Chain ID for Sepolia
+
 const VERIFIER_ABI = [
   {
     inputs: [{
@@ -87,12 +89,57 @@ function App() {
   const [isFetching, setIsFetching] = useState(false);
   const [verificationStats, setVerificationStats] = useState(null);
 
+  const checkAndSwitchNetwork = async (provider) => {
+    const network = await provider.getNetwork();
+    const chainId = "0x" + network.chainId.toString(16);
+    
+    if (chainId !== SEPOLIA_CHAIN_ID) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: SEPOLIA_CHAIN_ID }],
+        });
+      } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: SEPOLIA_CHAIN_ID,
+                chainName: 'Sepolia',
+                nativeCurrency: {
+                  name: 'Sepolia ETH',
+                  symbol: 'ETH',
+                  decimals: 18
+                },
+                rpcUrls: ['https://sepolia.infura.io/v3/'],
+                blockExplorerUrls: ['https://sepolia.etherscan.io']
+              }],
+            });
+          } catch (addError) {
+            throw new Error('Please add Sepolia network to MetaMask');
+          }
+        } else {
+          throw new Error('Please switch to Sepolia network');
+        }
+      }
+      // Refresh provider after network switch
+      return new BrowserProvider(window.ethereum);
+    }
+    return provider;
+  };
+
   const generateAndVerifyProof = async () => {
     setIsFetching(true);
 
     try {
-      const provider = new BrowserProvider(window.ethereum);
+      let provider = new BrowserProvider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
+      
+      // Check and switch to Sepolia if needed
+      provider = await checkAndSwitchNetwork(provider);
+      
       const signer = await provider.getSigner();
       const contract = new Contract(VERIFIER_CONTRACT_ADDRESS, VERIFIER_ABI, signer);
 

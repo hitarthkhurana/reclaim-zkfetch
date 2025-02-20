@@ -9,7 +9,7 @@ A decentralized application that verifies temperature conditions in San Francisc
 
 
 ## Deployed Addresses
-- Verifier Contract: `0x60A8DEBC449699f25FB3a01822B50d5C6395b00e`
+- Verifier Contract: `0x6E4e27f08FB956CfE66AeA75c256E62d82B87747`
 
 When you click "Verify and Claim 1 USDC":
 1. The DApp generates and verifies a ZK proof with real-time temperature data from OpenMeteo API for San Francisco and New York City
