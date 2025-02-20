@@ -130,12 +130,41 @@ function App() {
     return provider;
   };
 
+  // First, let's add proper MetaMask detection and error handling
+  const checkMetaMaskAvailability = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      toast.error('Please install MetaMask or open in MetaMask browser', {
+        duration: 5000,
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+      return false;
+    }
+    return true;
+  };
+
   const generateAndVerifyProof = async () => {
     setIsFetching(true);
 
     try {
+      // Check MetaMask first
+      const isMetaMaskAvailable = await checkMetaMaskAvailability();
+      if (!isMetaMaskAvailable) {
+        setIsFetching(false);
+        return;
+      }
+
       let provider = new BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
+      
+      // Request accounts first
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      } catch (connectError) {
+        throw new Error('Please connect your wallet first');
+      }
       
       // Check and switch to Sepolia if needed
       provider = await checkAndSwitchNetwork(provider);
